@@ -131,12 +131,36 @@ public final class MySignature {
 
     /**
      * 
-     * 
+     * Realiza a encriptação do resumo de mensagem guardado, gerado a partir do texto plano recebido. O valor é retornado.
      * 
      * @return string de bytes contendo a assinatura digital do texto plano guardado
      */
     public static byte[] sign() throws Exception {
         return MySignature.cipher.doFinal(MySignature.resumoMensagem);
+    }
+
+    /**
+     * 
+     * Guarda o valor da chave publica recebida na instância para futura decriptação da assinatura. Também troca o modo de operação para a decriptação
+     * 
+     * @param key valor da chave publica necessária para a decriptação da assinatura.
+     * 
+     */
+    public static void initVerify(PublicKey key) throws Exception{
+        MySignature.chavePublica = key;
+
+        // Inicializa o objeto cipher em modo de encryptação com a chave privada recebida
+        cipher.init(Cipher.DECRYPT_MODE, MySignature.chavePublica);
+    }
+
+    /**
+     * 
+     * Realiza a decriptacao da assinatura e compara o valor com o resumo de mensagem armazenado
+     * 
+     * @return true se o resumo de mensagem guardado for igual ao resumo de mensagem percebido apos a decriptacao da assinatura. false caso contrario
+     */
+    public static boolean verify(byte[] assinatura) throws Exception {
+        return MySignature.resumoMensagem == MySignature.cipher.doFinal(assinatura);
     }
 
 }
