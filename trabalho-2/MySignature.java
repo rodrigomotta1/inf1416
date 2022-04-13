@@ -1,4 +1,6 @@
 import java.security.*;
+import java.util.Arrays;
+
 import javax.crypto.*;
 
 /**
@@ -8,7 +10,7 @@ import javax.crypto.*;
 * Esta classe utiliza o padrão Singleton, ou seja, a instância é criada
 * uma única vez e reutilizada em toda a duração do programa
 * 
-* @author  Bruno Coutinho (matricula)
+* @author  Bruno Coutinho (1910392)
 * @author Rodrigo Motta (1811524)
 * 
 * @see https://refactoring.guru/pt-br/design-patterns/singleton/java/example#:~:text=O%20Singleton%20%C3%A9%20um%20padr%C3%A3o,contras%20que%20as%20vari%C3%A1veis%20globais.
@@ -26,7 +28,7 @@ public final class MySignature {
 
      /**
      * 
-     * Guarda o resumo de mensagem do texto plano á ser assinado
+     * Guarda o resumo de mensagem do texto plano a ser assinado
      * 
      */
     private static byte[] resumoMensagem;
@@ -83,7 +85,7 @@ public final class MySignature {
      * @param key valor da chave privada necessária para a encriptação do resumo de mensagem.
      * 
      */
-    public static void initSign(PrivateKey key) throws Exception {
+    public final void initSign(PrivateKey key) throws Exception {
         MySignature.chavePrivada = key;
 
         // Inicializa o objeto cipher em modo de encryptação com a chave privada recebida
@@ -98,7 +100,7 @@ public final class MySignature {
      * @param textoPlano texto plano que será assinado
      * 
      */
-    public static void update(byte[] textoPlano) throws Exception {
+    public final void update(byte[] textoPlano) throws Exception {
 
         // Define padrão de Digest em função do padrão de assinatura informado
         switch (MySignature.padraoAssinatura) {
@@ -131,11 +133,15 @@ public final class MySignature {
 
     /**
      * 
-     * Realiza a encriptação do resumo de mensagem guardado, gerado a partir do texto plano recebido. O valor é retornado.
+     * Realiza a encriptação do resumo de mensagem guardado, gerado a partir do texto plano recebido, e imprime digest. O valor é retornado.
      * 
      * @return string de bytes contendo a assinatura digital do texto plano guardado
      */
-    public static byte[] sign() throws Exception {
+    public final byte[] sign() throws Exception {
+        System.out.println("Digest calculated for message:");
+		for(int i = 0; i != MySignature.resumoMensagem.length; i++)
+			System.out.print(String.format("%02X", MySignature.resumoMensagem[i]));
+
         return MySignature.cipher.doFinal(MySignature.resumoMensagem);
     }
 
@@ -146,21 +152,26 @@ public final class MySignature {
      * @param key valor da chave publica necessária para a decriptação da assinatura.
      * 
      */
-    public static void initVerify(PublicKey key) throws Exception{
+    public final void initVerify(PublicKey key) throws Exception{
         MySignature.chavePublica = key;
 
-        // Inicializa o objeto cipher em modo de encryptação com a chave privada recebida
+        // Inicializa o objeto cipher em modo de decriptação com a chave pública recebida
         cipher.init(Cipher.DECRYPT_MODE, MySignature.chavePublica);
     }
 
     /**
      * 
-     * Realiza a decriptacao da assinatura e compara o valor com o resumo de mensagem armazenado
+     * Realiza a decriptacao da assinatura, imprime na saída padrão e compara o valor com o resumo de mensagem armazenado
      * 
      * @return true se o resumo de mensagem guardado for igual ao resumo de mensagem percebido apos a decriptacao da assinatura. false caso contrario
      */
-    public static boolean verify(byte[] assinatura) throws Exception {
-        return MySignature.resumoMensagem == MySignature.cipher.doFinal(assinatura);
+    public final boolean verify(byte[] assinatura) throws Exception {
+        byte[] DigestAssinatura = MySignature.cipher.doFinal(assinatura);
+        System.out.println("Digest obtained from decrypting digital signature:");
+		for(int i = 0; i != DigestAssinatura.length; i++)
+			System.out.print(String.format("%02X", DigestAssinatura[i]));
+    
+        return Arrays.equals(MySignature.resumoMensagem, DigestAssinatura);
     }
 
 }
