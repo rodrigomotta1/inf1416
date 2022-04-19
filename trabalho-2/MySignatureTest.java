@@ -1,5 +1,4 @@
 import java.security.*;
-import javax.crypto.*;
 
 /**
 * Esta classe testa a classe MySignature com base no texto plano e no padrão fornecidos via linha de comando.
