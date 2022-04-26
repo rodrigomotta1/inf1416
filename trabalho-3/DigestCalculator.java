@@ -26,11 +26,23 @@ public class DigestCalculator {
     public static void main(String[] args) throws Exception{
     
         // verifica args e recebe o texto plano + padrao de assinatura
-        if (args.length != 2){
-            System.err.println("Usage: java MySignatureTest string padrao");
-            System.exit(1);
+
+        // deve receber, nesta ordem:
+            // tipo do resumo de mensagem
+            // caminho pro arquivo com lista de resumos (base)
+            // caminho pra pasta de arquivos
+
+        if (args.length != 4){
+            System.err.println("Usage: java DigestCalculator path/to/digest-list.txt path/to/files-folder");
+            System.exit(1);s
         }
+
+        // Calcular o resumo de mensagem de todos os arquivos presentes na pasta recebida como parametro
+
+        // Comparar cada digest com todos os outros presentes na base, inclusive o próprio, se existir
         
+        // Na saída padrão, informar cada digest calculado, junto do tipo e do status definido
+
         return;
     }
 }
