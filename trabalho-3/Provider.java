@@ -42,8 +42,9 @@ public class Provider {
      * 
      * @param caminho_pasta caminho para diretório que contém arquivos que serão processados
      * @return lista de Arquivos inicializados com seu path
+     * @throws Exception
      */
-    public ArrayList<Arquivo> inicializa_arquivos(String caminho_pasta){
+    public ArrayList<Arquivo> inicializa_arquivos(String caminho_pasta, String tipo_digest) throws Exception{
         File pasta = new File(caminho_pasta);
         if (!pasta.isDirectory()){
             System.err.println("Error: path/to/files-folder is not a valid path for a folder");
@@ -54,7 +55,7 @@ public class Provider {
         ArrayList<String> file_names = new ArrayList<String>(Arrays.asList(pasta.list()));
 
         for (final String file_name : file_names){            
-            listaArquivos.add(new Arquivo(caminho_pasta + '/' + file_name));
+            listaArquivos.add(new Arquivo(caminho_pasta + '/' + file_name, tipo_digest));
         }
         return listaArquivos;
     }
@@ -67,6 +68,7 @@ public class Provider {
      * @return lista de DigestConhecidos, com todos seus atributos atualizados
      */
     public ArrayList<DigestConhecido> inicializa_digests_conhecidos(String path_to_digest_list){
+        File arquivo_digests_conhecidos = new File(path_to_digest_list);
 
     }
     

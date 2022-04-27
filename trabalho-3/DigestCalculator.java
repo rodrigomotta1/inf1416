@@ -48,7 +48,7 @@ public class DigestCalculator {
 
         // processa as informações da pasta de arquivos e do arquivo de digests conhecidos,
         // guardando os dados em estruturas adequadas
-        ArrayList<Arquivo> arquivosPasta = provider.inicializa_arquivos(path_to_folder);
+        ArrayList<Arquivo> arquivosPasta = provider.inicializa_arquivos(path_to_folder, digest_type);
         ArrayList<DigestConhecido> digestsConhecidos = provider.inicializa_digests_conhecidos(path_to_digest_list);
 
         // pseudocódigo:
