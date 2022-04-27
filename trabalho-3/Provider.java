@@ -42,22 +42,22 @@ public class Provider {
     /**
      * Recebe caminho para um diretório e transforma em lista de objetos da classe Arquivo
      * 
-     * @param caminho_pasta caminho para diretório que contém arquivos que serão processados
+     * @param caminhoPasta caminho para diretório que contém arquivos que serão processados
      * @return lista de Arquivos inicializados com seu path
      * @throws Exception
      */
-    public ArrayList<Arquivo> inicializa_arquivos(String caminho_pasta, String tipo_digest) throws Exception{
-        File pasta = new File(caminho_pasta);
+    public ArrayList<Arquivo> inicializaArquivos(String caminhoPasta, String tipoDigest) throws Exception{
+        File pasta = new File(caminhoPasta);
         if (!pasta.isDirectory()){
             System.err.println("Error: path/to/files-folder is not a valid path for a folder");
             System.exit(1);
         }
 
         ArrayList<Arquivo> listaArquivos = new ArrayList<Arquivo>();
-        ArrayList<String> file_names = new ArrayList<String>(Arrays.asList(pasta.list()));
+        ArrayList<String> fileNames = new ArrayList<String>(Arrays.asList(pasta.list()));
 
-        for (final String file_name : file_names){            
-            listaArquivos.add(new Arquivo(caminho_pasta + '/' + file_name, tipo_digest));
+        for (final String fileName : fileNames){            
+            listaArquivos.add(new Arquivo(caminhoPasta + '/' + fileName, tipoDigest));
         }
         return listaArquivos;
     }
@@ -70,7 +70,7 @@ public class Provider {
      * @return lista de DigestConhecidos, com todos seus atributos atualizados
      * @throws FileNotFoundException
      */
-    public ArrayList<DigestConhecido> inicializa_digests_conhecidos(String pathToDigestList) throws FileNotFoundException{
+    public ArrayList<DigestConhecido> inicializaDigestsConhecidos(String pathToDigestList) throws FileNotFoundException{
         File arquivoDigestsConhecidos = new File(pathToDigestList);
         ArrayList<DigestConhecido> listaDigestsConhecidos = new ArrayList<>();
 
@@ -106,38 +106,42 @@ public class Provider {
      * @param listaArquivos
      * @param pathToDigestList
      */
-    public Arquivo.DigestCheckStatus check_status(Arquivo arquivo, ArrayList<Arquivo> listaArquivos,
-                              ArrayList<DigestConhecido> digestsConhecidos){
-        // if colision:
-        //     return colision
-        // if not_found:
-        //     return not_found
-        // if ok:
-        //     return ok
-        // return not_ok
+    public Arquivo.DigestCheckStatus checkStatus(Arquivo arquivo, ArrayList<Arquivo> listaArquivos,
+    ArrayList<DigestConhecido> digestsConhecidos){
+        if (this.checkColision(arquivo, listaArquivos, digestsConhecidos)){
+            return Arquivo.DigestCheckStatus.COLISION;
+        }
+        if (this.checkNotFound(arquivo, digestsConhecidos)){
+            return Arquivo.DigestCheckStatus.NOT_FOUND;
+        }
+        if (this.checkOk(arquivo, digestsConhecidos)){
+            return Arquivo.DigestCheckStatus.OK;
+        }
+        return Arquivo.DigestCheckStatus.NOT_OK;
     }
 
     /**
      * 
      * @return
      */
-    private int check_colision(){
-        return 1;
+    private boolean checkColision(Arquivo arquivo, ArrayList<Arquivo> listaArquivos,
+    ArrayList<DigestConhecido> digestsConhecidos){
+        return true;
     }
 
     /**
      * 
      * @return
      */
-    private int check_not_found(){
-        return 1;
+    private boolean checkNotFound(Arquivo arquivo, ArrayList<DigestConhecido> digestsConhecidos){
+        return true;
     }
 
     /**
      * 
      * @return
      */
-    private int check_ok(){
-        return 1;
+    private boolean checkOk(Arquivo arquivo, ArrayList<DigestConhecido> digestsConhecidos){
+        return true;
     }
 }
