@@ -80,7 +80,7 @@ public class Provider {
      * @param listaArquivos
      * @param path_to_digest_list
      */
-    public void check_status(Arquivo arquivo, ArrayList<Arquivo> listaArquivos,
+    public Arquivo.DigestCheckStatus check_status(Arquivo arquivo, ArrayList<Arquivo> listaArquivos,
                               ArrayList<DigestConhecido> digestsConhecidos){
         // if colision:
         //     return colision
