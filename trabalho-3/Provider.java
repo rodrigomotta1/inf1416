@@ -1,5 +1,7 @@
+import java.io.File;
 import java.security.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Provider {
 
@@ -38,11 +40,23 @@ public class Provider {
     /**
      * Recebe caminho para um diretório e transforma em lista de objetos da classe Arquivo
      * 
-     * @param path_to_folder caminho para diretório que contém arquivos que serão processados
+     * @param caminho_pasta caminho para diretório que contém arquivos que serão processados
      * @return lista de Arquivos inicializados com seu path
      */
-    public ArrayList<Arquivo> inicializa_arquivos(String path_to_folder){
+    public ArrayList<Arquivo> inicializa_arquivos(String caminho_pasta){
+        File pasta = new File(caminho_pasta);
+        if (!pasta.isDirectory()){
+            System.err.println("Error: path/to/files-folder is not a valid path for a folder");
+            System.exit(1);
+        }
 
+        ArrayList<Arquivo> listaArquivos = new ArrayList<Arquivo>();
+        ArrayList<String> file_names = new ArrayList<String>(Arrays.asList(pasta.list()));
+
+        for (final String file_name : file_names){            
+            listaArquivos.add(new Arquivo(caminho_pasta + '/' + file_name));
+        }
+        return listaArquivos;
     }
 
     /**
@@ -80,7 +94,7 @@ public class Provider {
      * @return
      */
     private int check_colision(){
-
+        return 1;
     }
 
     /**
@@ -88,7 +102,7 @@ public class Provider {
      * @return
      */
     private int check_not_found(){
-
+        return 1;
     }
 
     /**
@@ -96,6 +110,6 @@ public class Provider {
      * @return
      */
     private int check_ok(){
-
+        return 1;
     }
 }
