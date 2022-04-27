@@ -60,11 +60,6 @@ public class DigestCalculator {
         ArrayList<Arquivo> arquivosPasta = provider.inicializaArquivos(path_to_folder, digest_type);
         ArrayList<DigestConhecido> digestsConhecidos = provider.inicializaDigestsConhecidos(path_to_digest_list);
 
-        // calcula o digest de cada arquivo da pasta, armazenando-o no objeto do arquivo
-        for (final Arquivo arquivo : arquivosPasta){
-            // arquivo.calcula_digest(digest_type);
-        }
-
         // determina o status de cada arquivo da pasta, comparando o digest de cada arquivo com
         // a lista de digests conhecidos e com os digests dos outros arquivos da pasta
         for (final Arquivo arquivo : arquivosPasta){
