@@ -57,8 +57,8 @@ public class DigestCalculator {
 
         // processa as informações da pasta de arquivos e do arquivo de digests conhecidos,
         // guardando os dados em estruturas adequadas e calculando os digests
-        ArrayList<Arquivo> arquivosPasta = provider.inicializa_arquivos(path_to_folder, digest_type);
-        ArrayList<DigestConhecido> digestsConhecidos = provider.inicializa_digests_conhecidos(path_to_digest_list);
+        ArrayList<Arquivo> arquivosPasta = provider.inicializaArquivos(path_to_folder, digest_type);
+        ArrayList<DigestConhecido> digestsConhecidos = provider.inicializaDigestsConhecidos(path_to_digest_list);
 
         // calcula o digest de cada arquivo da pasta, armazenando-o no objeto do arquivo
         for (final Arquivo arquivo : arquivosPasta){
@@ -68,7 +68,7 @@ public class DigestCalculator {
         // determina o status de cada arquivo da pasta, comparando o digest de cada arquivo com
         // a lista de digests conhecidos e com os digests dos outros arquivos da pasta
         for (final Arquivo arquivo : arquivosPasta){
-            Arquivo.DigestCheckStatus status =  provider.check_status(arquivo, arquivosPasta, digestsConhecidos);
+            Arquivo.DigestCheckStatus status =  provider.checkStatus(arquivo, arquivosPasta, digestsConhecidos);
             arquivo.setStatus(status);
 
             // adicionando arquivo com status not found à lista de digests conhecidos
@@ -77,7 +77,7 @@ public class DigestCalculator {
             } 
         }
 
-        for (final Arquivo arquivo : arquivosPasta){
+        for (final Arquivo arquivo : arquivosPasta) {
             System.out.println(arquivo.getNome() + " " + digest_type + " " + arquivo.getDigest() + " " + arquivo.getStatus());
         }
 
