@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Os STATUS podem ser:
  *      OK -> Digest calculado é igual ao registrado, sem colisão com outros digests armazenados no arquivo de registro
  *      NOT OK -> Digest calculado é diferente do registrado, sem colisão com outros digests armazenados no arquivo de registro
- *      NOT FOUND -> Arquivo não foi encontrado no arquivo de registro de digests
+ *      NOT FOUND -> Digest do Arquivo não foi encontrado no arquivo de registro de digests
  *      COLISION -> Digest calculado é igual ao digest de outro arquivo registrado na lista de registro de digests
  * 
  * @author  Bruno Coutinho (1910392)
