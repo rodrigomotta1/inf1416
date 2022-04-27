@@ -120,13 +120,36 @@ public class Provider {
         return Arquivo.DigestCheckStatus.NOT_OK;
     }
 
+    private String converteDigestStringHexadecimal(byte [] digest){
+        StringBuffer buf = new StringBuffer();
+        for(int i = 0; i < digest.length; i++) {
+            String hex = Integer.toHexString(0x0100 + (digest[i] & 0x00FF)).substring(1);
+            buf.append((hex.length() < 2 ? "0" : "") + hex);
+        }
+        return buf.toString();
+    }
+
     /**
      * 
      * @return
      */
     private boolean checkColision(Arquivo arquivo, ArrayList<Arquivo> listaArquivos,
     ArrayList<DigestConhecido> digestsConhecidos){
-        return true;
+        // confere primeiro com outros arquivos da pasta
+        for (final Arquivo arquivoCandidato : listaArquivos){
+            if(Arrays.equals(arquivoCandidato.getDigest(), arquivo.getDigest()) && !
+            (arquivo == arquivoCandidato)){
+                return true;
+            }
+        }
+
+        // depois confere se colide com base de digests conhecidos
+        for (final DigestConhecido digestCandidato : digestsConhecidos){
+            if (this.converteDigestStringHexadecimal(arquivo.getDigest()).equals(digestCandidato.digestHex)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
