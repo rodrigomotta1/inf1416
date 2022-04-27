@@ -82,7 +82,7 @@ public class Arquivo {
         return this.digest;
     }
 
-    public String getnome() {
+    public String getNome() {
         return this.nome;
     }
 

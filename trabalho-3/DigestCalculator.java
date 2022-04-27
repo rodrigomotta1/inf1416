@@ -1,6 +1,11 @@
 import java.security.*;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.File;
 import java.nio.file.*;
+import java.io.FileOutputStream;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 
 /**
@@ -55,13 +60,6 @@ public class DigestCalculator {
         ArrayList<Arquivo> arquivosPasta = provider.inicializa_arquivos(path_to_folder, digest_type);
         ArrayList<DigestConhecido> digestsConhecidos = provider.inicializa_digests_conhecidos(path_to_digest_list);
 
-        // pseudocódigo:
-        // for arquivo in pasta:
-        //      calcula o digest de cada
-        // for digest_calculado:
-        //      determina status, comparando com outros (tanto os do arquivo quanto recém calculados)
-        // imprime tudo
-
         // calcula o digest de cada arquivo da pasta, armazenando-o no objeto do arquivo
         for (final Arquivo arquivo : arquivosPasta){
             // arquivo.calcula_digest(digest_type);
@@ -74,19 +72,14 @@ public class DigestCalculator {
             arquivo.setStatus(status);
 
             // adicionando arquivo com status not found à lista de digests conhecidos
-            if (status == Arquivo.DigestCheckStatus.NOT_FOUND){
-                //TODO adicionar ao arquivo de lista de digests conhecidos
+            if (status == Arquivo.DigestCheckStatus.NOT_FOUND) {
+                replaceLines(path_to_digest_list, arquivo.getNome(), digest_type + " " + arquivo.getDigest());
             } 
         }
 
-        //TODO imprimir tudo
-
-
-        // Calcular o resumo de mensagem de todos os arquivos presentes na pasta recebida como parametro
-
-        // Comparar cada digest com todos os outros presentes na base, inclusive o próprio, se existir
-        
-        // Na saída padrão, informar cada digest calculado, junto do tipo e do status definido
+        for (final Arquivo arquivo : arquivosPasta){
+            System.out.println(arquivo.getNome() + " " + digest_type + " " + arquivo.getDigest() + " " + arquivo.getStatus());
+        }
 
         return;
     }
@@ -108,6 +101,36 @@ public class DigestCalculator {
             return false;
         } else {
             return true;
+        }
+    }
+
+    // read file one line at a time
+    // replace line as you read the file and store updated lines in StringBuffer
+    // overwrite the file with the new lines
+    public static void replaceLines(String path, String filename, String newContent) {
+        try {
+            // input the (modified) file content to the StringBuffer "input"
+            BufferedReader file = new BufferedReader(new FileReader(path));
+            StringBuffer inputBuffer = new StringBuffer();
+            String line;
+
+            while ((line = file.readLine()) != null) {
+                if (line.split(" ", 2)[0] == filename) {
+                    line = line + newContent; // replace the line here
+                }
+                inputBuffer.append(line);
+                inputBuffer.append('\n');
+            }
+            file.close();
+
+            // write the new string with the replaced line OVER the same file
+            FileOutputStream fileOut = new FileOutputStream(path);
+            fileOut.write(inputBuffer.toString().getBytes());
+            fileOut.close();
+
+        } catch (Exception e) {
+            System.out.println("Problem reading file.");
+            System.exit(1);
         }
     }
 }
