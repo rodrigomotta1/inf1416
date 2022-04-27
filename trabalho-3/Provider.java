@@ -1,7 +1,9 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.security.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Provider {
 
@@ -64,12 +66,36 @@ public class Provider {
      * Recebe arquivo que contém uma lista de digests de arquivos conhecidos e transforma em
      * lista de objetos da classe Arquivo
      * 
-     * @param path_to_digest_list caminho do arquivo que contém uma lista de digests de arquivos conhecidos
+     * @param pathToDigestList caminho do arquivo que contém uma lista de digests de arquivos conhecidos
      * @return lista de DigestConhecidos, com todos seus atributos atualizados
+     * @throws FileNotFoundException
      */
-    public ArrayList<DigestConhecido> inicializa_digests_conhecidos(String path_to_digest_list){
-        File arquivo_digests_conhecidos = new File(path_to_digest_list);
+    public ArrayList<DigestConhecido> inicializa_digests_conhecidos(String pathToDigestList) throws FileNotFoundException{
+        File arquivoDigestsConhecidos = new File(pathToDigestList);
+        ArrayList<DigestConhecido> listaDigestsConhecidos = new ArrayList<>();
 
+        Scanner leitor = new Scanner(arquivoDigestsConhecidos);
+        while(leitor.hasNextLine()){
+            String linha = leitor.nextLine();
+            String[] partesLinha = linha.split("\s");
+            DigestConhecido primeiroDigest = new DigestConhecido();
+            primeiroDigest.fileName = partesLinha[0];
+            primeiroDigest.digestType = partesLinha[1];
+            primeiroDigest.digestHex = partesLinha[2];
+            listaDigestsConhecidos.add(primeiroDigest);
+
+            if (partesLinha.length > 3){
+                for(int i = 3; i < partesLinha.length; i += 2){
+                    DigestConhecido outroDigest = new DigestConhecido();
+                    outroDigest.fileName = partesLinha[0];
+                    outroDigest.digestType = partesLinha[i];
+                    outroDigest.digestHex = partesLinha[i + 1];
+                    listaDigestsConhecidos.add(outroDigest);
+                }
+            }
+        }
+        leitor.close();
+        return listaDigestsConhecidos;
     }
     
     /**
@@ -78,7 +104,7 @@ public class Provider {
      * 
      * @param arquivo
      * @param listaArquivos
-     * @param path_to_digest_list
+     * @param pathToDigestList
      */
     public Arquivo.DigestCheckStatus check_status(Arquivo arquivo, ArrayList<Arquivo> listaArquivos,
                               ArrayList<DigestConhecido> digestsConhecidos){
