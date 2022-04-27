@@ -1,5 +1,6 @@
 import java.security.*;
 import java.util.ArrayList;
+import java.nio.file.*;
 
 
 /**
@@ -27,29 +28,44 @@ import java.util.ArrayList;
 public class DigestCalculator {
     public static void main(String[] args) throws Exception{
     
-        // verifica args e recebe o texto plano + padrao de assinatura
-
-        // deve receber, nesta ordem:
-            // tipo do resumo de mensagem
-            // caminho pro arquivo com lista de resumos (base)
-            // caminho pra pasta de arquivos
-
         if (args.length != 4){
-            System.err.println("Usage: java DigestCalculator digest_type path/to/digest-list.txt path/to/files-folder");
+            System.err.println("Usage: java DigestCalculator tipoDigest path/to/digest-list.txt path/to/files-folder");
             System.exit(1);
         }
-
-        //TODO conferir se parâmetros são válidos
 
         String digest_type = args[0];
         String path_to_digest_list = args[1];
         String path_to_folder = args[2];
+
+        if(!pathValido(path_to_digest_list) | !pathValido(path_to_folder))
+        {
+            System.out.println("Path invalido");
+            System.exit(1);
+        }
+
+        if (!digestValido(digest_type)) {
+            System.out.println("Tipo de digest invalido");
+            System.exit(1);
+        }
+
         Provider provider = Provider.getInstance(digest_type);
 
         // processa as informações da pasta de arquivos e do arquivo de digests conhecidos,
         // guardando os dados em estruturas adequadas e calculando os digests
         ArrayList<Arquivo> arquivosPasta = provider.inicializa_arquivos(path_to_folder, digest_type);
         ArrayList<DigestConhecido> digestsConhecidos = provider.inicializa_digests_conhecidos(path_to_digest_list);
+
+        // pseudocódigo:
+        // for arquivo in pasta:
+        //      calcula o digest de cada
+        // for digest_calculado:
+        //      determina status, comparando com outros (tanto os do arquivo quanto recém calculados)
+        // imprime tudo
+
+        // calcula o digest de cada arquivo da pasta, armazenando-o no objeto do arquivo
+        for (final Arquivo arquivo : arquivosPasta){
+            // arquivo.calcula_digest(digest_type);
+        }
 
         // determina o status de cada arquivo da pasta, comparando o digest de cada arquivo com
         // a lista de digests conhecidos e com os digests dos outros arquivos da pasta
@@ -75,4 +91,23 @@ public class DigestCalculator {
         return;
     }
 
+    private static boolean pathValido(String path) {
+        try {
+            Paths.get(path);
+
+        } catch (InvalidPathException | NullPointerException ex) {
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private static boolean digestValido(String digest) {
+        if (digest != "MD5" & digest != "SHA1" & digest != "SHA256" & digest != "SHA512") {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

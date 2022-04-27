@@ -27,7 +27,7 @@ public class Arquivo {
 
     private MessageDigest providerDigest;
 
-    public enum DigestCheckStatus{
+    public enum DigestCheckStatus {
         OK,                         // digest calculado igual ao encontrado na base
         NOT_OK,                     // digest calculado diferente do encontrado na base
         NOT_FOUND,                  // digest do arquivo não localizado na base
