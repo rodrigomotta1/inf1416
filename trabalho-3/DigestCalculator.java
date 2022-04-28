@@ -30,7 +30,7 @@ import java.io.FileReader;
 public class DigestCalculator {
     public static void main(String[] args) throws Exception{
     
-        if (args.length != 4){
+        if (args.length != 3){
             System.err.println("Usage: java DigestCalculator tipoDigest path/to/digest-list.txt path/to/files-folder");
             System.exit(1);
         }
@@ -89,7 +89,7 @@ public class DigestCalculator {
     }
 
     private static boolean digestValido(String digest) {
-        if (digest != "MD5" & digest != "SHA1" & digest != "SHA256" & digest != "SHA512") {
+        if (!(digest.equals("MD5"))  && !(digest.equals("SHA1")) && !(digest.equals("SHA256")) && !(digest.equals("SHA512"))) {
             return false;
         } else {
             return true;
