@@ -65,7 +65,7 @@ public class DigestCalculator {
 
             // adicionando arquivo com status not found à lista de digests conhecidos
             if (status == Arquivo.DigestCheckStatus.NOT_FOUND) {
-                replaceLines(path_to_digest_list, arquivo.getNome(), digest_type + " " + arquivo.getDigest(), arquivo, provider);
+                replaceLines(path_to_digest_list, arquivo.getNome(), digest_type + " " + provider.converteDigestStringHexadecimal(arquivo.getDigest()), arquivo, provider);
             } 
         }
 
@@ -107,9 +107,9 @@ public class DigestCalculator {
             String line;
             boolean isOnFileList = false;
             while ((line = file.readLine()) != null) {
-                if (line.split(" ", 2)[0] == filename) {
+                if (line.split(" ", 2)[0].equals(filename)) {
                     isOnFileList = true;
-                    line = line + newContent; // replace the line here
+                    line = line + " " + newContent; // replace the line here
                 }
                 inputBuffer.append(line);
                 inputBuffer.append('\n');

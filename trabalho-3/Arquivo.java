@@ -1,4 +1,5 @@
 import java.security.*;
+import java.io.File;
 import java.nio.file.*;
 
 /**
@@ -39,16 +40,28 @@ public class Arquivo {
 
     public Arquivo(String path, String tipoDigest) throws Exception {
         this.status = DigestCheckStatus.UNDEFINED;
-        this.path = Paths.get(path);
+        File file = new File(path);
         // Pega e guarda o conteúdo do arquivo informado em path
-        this.conteudo = Files.readAllBytes(this.path);
-        this.nome = this.path.getFileName().toString();
+        this.conteudo = Files.readAllBytes(Paths.get(path));
+        this.nome = file.getName();
         this.tipoDigest = tipoDigest;
 
         // Calcula e armazena o resumo de mensagem do conteúdo do arquivo informado em path
         try {
-
-            this.providerDigest = MessageDigest.getInstance(tipoDigest);
+            if (tipoDigest == "MD5") {
+                this.providerDigest = MessageDigest.getInstance(tipoDigest);
+            }
+            else {
+                if (tipoDigest.equals("SHA1")) {
+                    this.providerDigest = MessageDigest.getInstance("SHA-1");
+                }
+                else if (tipoDigest.equals("SHA256")) {
+                    this.providerDigest = MessageDigest.getInstance("SHA-256");
+                }
+                else if (tipoDigest.equals("SHA512")) {
+                    this.providerDigest = MessageDigest.getInstance("SHA-512");
+                }
+            }
             
         } catch (NoSuchAlgorithmException e) {
 
