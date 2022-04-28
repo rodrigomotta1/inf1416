@@ -8,7 +8,6 @@ import java.util.Scanner;
 public class Provider {
 
     private static Provider instance;
-    private static String padraoDigest;
 
     /**
      * 
@@ -20,7 +19,6 @@ public class Provider {
      *
      */
     private Provider(String padrao) throws Exception {
-        Provider.padraoDigest = padrao;
     }
 
     /**
@@ -180,5 +178,6 @@ public class Provider {
                 }
             }
         }
+        return false;
     }
 }
