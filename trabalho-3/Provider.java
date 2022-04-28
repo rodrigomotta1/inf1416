@@ -72,25 +72,31 @@ public class Provider {
         ArrayList<DigestConhecido> listaDigestsConhecidos = new ArrayList<>();
 
         Scanner leitor = new Scanner(arquivoDigestsConhecidos);
-        while(leitor.hasNextLine()){
-            String linha = leitor.nextLine();
-            String[] partesLinha = linha.split(" ");
-            DigestConhecido primeiroDigest = new DigestConhecido();
-            primeiroDigest.fileName = partesLinha[0];
-            primeiroDigest.digestType = partesLinha[1];
-            primeiroDigest.digestHex = partesLinha[2];
-            listaDigestsConhecidos.add(primeiroDigest);
-
-            if (partesLinha.length > 3){
-                for(int i = 3; i < partesLinha.length; i += 2){
-                    DigestConhecido outroDigest = new DigestConhecido();
-                    outroDigest.fileName = partesLinha[0];
-                    outroDigest.digestType = partesLinha[i];
-                    outroDigest.digestHex = partesLinha[i + 1];
-                    listaDigestsConhecidos.add(outroDigest);
+        try {
+            while(leitor.hasNextLine()){
+                String linha = leitor.nextLine();
+                String[] partesLinha = linha.split(" ");
+                DigestConhecido primeiroDigest = new DigestConhecido();
+                primeiroDigest.fileName = partesLinha[0];
+                primeiroDigest.digestType = partesLinha[1];
+                primeiroDigest.digestHex = partesLinha[2];
+                listaDigestsConhecidos.add(primeiroDigest);
+    
+                if (partesLinha.length > 3){
+                    for(int i = 3; i < partesLinha.length; i += 2){
+                        DigestConhecido outroDigest = new DigestConhecido();
+                        outroDigest.fileName = partesLinha[0];
+                        outroDigest.digestType = partesLinha[i];
+                        outroDigest.digestHex = partesLinha[i + 1];
+                        listaDigestsConhecidos.add(outroDigest);
+                    }
                 }
             }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("A lista de digests precisa estar vazia, isto é, sem newlines.");
+            System.exit(1);
         }
+        
         leitor.close();
         return listaDigestsConhecidos;
     }
