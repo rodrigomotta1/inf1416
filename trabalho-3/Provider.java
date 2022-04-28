@@ -74,7 +74,7 @@ public class Provider {
         Scanner leitor = new Scanner(arquivoDigestsConhecidos);
         while(leitor.hasNextLine()){
             String linha = leitor.nextLine();
-            String[] partesLinha = linha.split("\s");
+            String[] partesLinha = linha.split(" ");
             DigestConhecido primeiroDigest = new DigestConhecido();
             primeiroDigest.fileName = partesLinha[0];
             primeiroDigest.digestType = partesLinha[1];
