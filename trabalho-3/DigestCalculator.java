@@ -39,7 +39,7 @@ public class DigestCalculator {
         String path_to_digest_list = args[1];
         String path_to_folder = args[2];
 
-        if(!pathValido(path_to_digest_list) || !pathValido(path_to_folder))
+        if(!pathValido(path_to_digest_list) | !pathValido(path_to_folder))
         {
             System.out.println("Path invalido");
             System.exit(1);
@@ -80,7 +80,7 @@ public class DigestCalculator {
         try {
             Paths.get(path);
 
-        } catch (InvalidPathException || NullPointerException ex) {
+        } catch (InvalidPathException | NullPointerException ex) {
 
             return false;
         }
