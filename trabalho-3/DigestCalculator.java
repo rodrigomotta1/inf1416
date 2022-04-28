@@ -65,12 +65,12 @@ public class DigestCalculator {
 
             // adicionando arquivo com status not found à lista de digests conhecidos
             if (status == Arquivo.DigestCheckStatus.NOT_FOUND) {
-                replaceLines(path_to_digest_list, arquivo.getNome(), digest_type + " " + arquivo.getDigest());
+                replaceLines(path_to_digest_list, arquivo.getNome(), digest_type + " " + arquivo.getDigest(), arquivo, provider);
             } 
         }
 
         for (final Arquivo arquivo : arquivosPasta) {
-            System.out.println(arquivo.getNome() + " " + digest_type + " " + arquivo.getDigest() + " " + arquivo.getStatus());
+            System.out.println(arquivo.getNome() + " " + digest_type + " " + provider.converteDigestStringHexadecimal(arquivo.getDigest()) + " " + arquivo.getStatus());
         }
 
         return;
@@ -99,18 +99,24 @@ public class DigestCalculator {
     // read file one line at a time
     // replace line as you read the file and store updated lines in StringBuffer
     // overwrite the file with the new lines
-    public static void replaceLines(String path, String filename, String newContent) {
+    public static void replaceLines(String path, String filename, String newContent, Arquivo arq, Provider provider) {
         try {
             // input the (modified) file content to the StringBuffer "input"
             BufferedReader file = new BufferedReader(new FileReader(path));
             StringBuffer inputBuffer = new StringBuffer();
             String line;
-
+            boolean isOnFileList = false;
             while ((line = file.readLine()) != null) {
                 if (line.split(" ", 2)[0] == filename) {
+                    isOnFileList = true;
                     line = line + newContent; // replace the line here
                 }
                 inputBuffer.append(line);
+                inputBuffer.append('\n');
+            }
+            if(!isOnFileList)
+            {
+                inputBuffer.append(arq.getNome() + " " + arq.getTipoDigest() + " " + provider.converteDigestStringHexadecimal(arq.getDigest()));
                 inputBuffer.append('\n');
             }
             file.close();
