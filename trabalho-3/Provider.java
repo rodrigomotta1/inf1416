@@ -142,7 +142,8 @@ public class Provider {
 
         // depois confere se colide com base de digests conhecidos
         for (final DigestConhecido digestCandidato : digestsConhecidos){
-            if (this.converteDigestStringHexadecimal(arquivo.getDigest()).equals(digestCandidato.digestHex)){
+            if (this.converteDigestStringHexadecimal(arquivo.getDigest()).equals(digestCandidato.digestHex) &&
+            !(digestCandidato.fileName.equals(arquivo.getNome()))){
                 return true;
             }
         }
