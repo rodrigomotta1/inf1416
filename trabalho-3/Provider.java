@@ -157,6 +157,11 @@ public class Provider {
      * @return
      */
     private boolean checkNotFound(Arquivo arquivo, ArrayList<DigestConhecido> digestsConhecidos){
+        for (final DigestConhecido digestCandidato : digestsConhecidos){
+            if (arquivo.getNome().equals(digestCandidato.fileName)){
+                return false;
+            }
+        }
         return true;
     }
 
