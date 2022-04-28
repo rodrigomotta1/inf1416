@@ -48,7 +48,7 @@ public class Arquivo {
 
         // Calcula e armazena o resumo de mensagem do conteúdo do arquivo informado em path
         try {
-            if (tipoDigest == "MD5") {
+            if (tipoDigest.equals("MD5")) {
                 this.providerDigest = MessageDigest.getInstance(tipoDigest);
             }
             else {
