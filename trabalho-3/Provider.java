@@ -158,7 +158,7 @@ public class Provider {
      */
     private boolean checkNotFound(Arquivo arquivo, ArrayList<DigestConhecido> digestsConhecidos){
         for (final DigestConhecido digestCandidato : digestsConhecidos){
-            if (arquivo.getNome().equals(digestCandidato.fileName)){
+            if (arquivo.getNome().equals(digestCandidato.fileName) && arquivo.getTipoDigest().equals(digestCandidato.digestType)){
                 return false;
             }
         }
@@ -170,6 +170,15 @@ public class Provider {
      * @return
      */
     private boolean checkOk(Arquivo arquivo, ArrayList<DigestConhecido> digestsConhecidos){
-        return true;
+        for (final DigestConhecido digestCandidato : digestsConhecidos){
+            if (arquivo.getNome().equals(digestCandidato.fileName) && arquivo.getTipoDigest().equals(digestCandidato.digestType)){
+                if(this.converteDigestStringHexadecimal(arquivo.getDigest()).equals(digestCandidato.digestHex)){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
     }
 }

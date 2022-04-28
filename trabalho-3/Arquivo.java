@@ -27,6 +27,8 @@ public class Arquivo {
 
     private MessageDigest providerDigest;
 
+    private String tipoDigest;
+
     public enum DigestCheckStatus {
         OK,                         // digest calculado igual ao encontrado na base
         NOT_OK,                     // digest calculado diferente do encontrado na base
@@ -41,6 +43,7 @@ public class Arquivo {
         // Pega e guarda o conteúdo do arquivo informado em path
         this.conteudo = Files.readAllBytes(this.path);
         this.nome = this.path.getFileName().toString();
+        this.tipoDigest = tipoDigest;
 
         // Calcula e armazena o resumo de mensagem do conteúdo do arquivo informado em path
         try {
@@ -84,6 +87,10 @@ public class Arquivo {
 
     public String getNome() {
         return this.nome;
+    }
+
+    public String getTipoDigest(){
+        return this.tipoDigest;
     }
 
 }
