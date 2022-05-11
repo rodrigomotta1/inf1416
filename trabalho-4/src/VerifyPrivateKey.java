@@ -78,7 +78,7 @@ public class VerifyPrivateKey {
         PublicKey publicKey = userCertificate.getPublicKey();
 
 
-        // ================= 3 ====================
+        // ================= 3, 4, 5 ====================
         // Generate 2048 random bytes
         byte[] randomBytes = new byte[2048];
         SecureRandom.getInstanceStrong().nextBytes(randomBytes);
