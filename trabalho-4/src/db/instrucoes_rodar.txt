@@ -1,0 +1,4 @@
+entrar na pasta do trabalho no cmd
+digitar .\sqlite3.exe
+(se tiver dado certo e aparecer q vc ta tipo num psql só q do sqlite) digitar .open trab4.db
+se quiser ver as tabelas digitar .tables
