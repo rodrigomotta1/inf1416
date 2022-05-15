@@ -1,0 +1,16 @@
+Autenticação
+    Etapa 1
+    Etapa 2
+    Etapa 3
+
+Ações principais dos usuários
+    Cadastrar novo usuário (somente admin)
+    Alterar senha pessoal e certificado digital do usuário
+    Consultar página de arquivos secretos do usuário
+    Sair do sistema
+
+Verificar se usuário pode ver arquivo e, se sim, copiar arquivo
+
+Fazer espécie de controller p/ gerenciar estados do sistema e "telas"
+
+Colocar inserção dos registros e implementar programa LogView p/ ver logs
