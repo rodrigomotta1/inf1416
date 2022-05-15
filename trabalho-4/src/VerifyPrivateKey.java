@@ -1,16 +1,4 @@
 import java.security.*;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
-import java.security.spec.PKCS8EncodedKeySpec;
-
-import javax.crypto.*;
-import javax.crypto.spec.*;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.nio.file.Files;
-
-import java.util.Base64;
 
 
 public class VerifyPrivateKey {
@@ -20,7 +8,7 @@ public class VerifyPrivateKey {
             System.err.println("Usage: java VerifyPrivateKey palavra-passe private-key public-key");
             System.exit(1);
         }
-        byte[] palavraPasse = args[0].getBytes("UTF8");
+        String palavraPasse = args[0];
         String privateKeyFilepath = args[1];
         String publicKeyFilepath = args[2];
         
@@ -32,50 +20,16 @@ public class VerifyPrivateKey {
             // 5: Output = True False de assinatura OK
 
         // ================= 1 ====================
-        // File bytes retrieval
-        File encryptedKey = new File(privateKeyFilepath);
-        byte[] privKeyEncryptedBytes = Files.readAllBytes(encryptedKey.toPath());
-
-        // PRNG Setup
-        SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-        secureRandom.setSeed(palavraPasse);
-
-        // Key generation with created PRNG
-        KeyGenerator keyGen = KeyGenerator.getInstance("DES");
-        keyGen.init(56, secureRandom);
-        Key key = keyGen.generateKey();
-
-        // Cipher setup
-        Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, key);
-
-        // Decryption result - base 64 encoded private key
-        byte[] encodedPKCS8PrivateKey = cipher.doFinal(privKeyEncryptedBytes);
-
-        // Base 64 decode
-        String privateKeyPlainText = new String(encodedPKCS8PrivateKey, "UTF8");
-        String privateKeyPEM = privateKeyPlainText
-                                            .replace("-----BEGIN PRIVATE KEY-----", "")
-                                            .replaceAll(System.lineSeparator(), "")
-                                            .replace("-----END PRIVATE KEY-----", "");
-
-        byte[] decodedPKCS8PrivateKey = Base64.getDecoder().decode(privateKeyPEM);
+        // instancia essa classe para usar métodos auxiliares dela
+        Provider provider = Provider.getInstance();
 
         // Private Key Generation
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        PrivateKey privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(decodedPKCS8PrivateKey));
+        PrivateKey privateKey = provider.decryptPrivateKey(privateKeyFilepath, palavraPasse);
 
 
         // ================= 2 ====================
-        // Retrieve Certificate File Bytes
-        File certificateFile = new File(publicKeyFilepath);
-        byte[] certificateBytes = Files.readAllBytes(certificateFile.toPath());
-
-        // Generate Certificate from File bytes
-        CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-        Certificate userCertificate = certificateFactory.generateCertificate(new ByteArrayInputStream(certificateBytes));
-
-        PublicKey publicKey = userCertificate.getPublicKey();
+        // Generate Public Kew object from Certificate File
+        PublicKey publicKey = provider.getPublicKeyFromCert(publicKeyFilepath);
 
 
         // ================= 3, 4, 5 ====================
@@ -100,14 +54,11 @@ public class VerifyPrivateKey {
         System.out.println( buf.toString() );
 
         // signature.initVerify(certificate); tb funciona? 
-        signature.initVerify(publicKey);
-        signature.update(randomBytes);
-        if (signature.verify(signatureValue)) {
+        if (provider.verifySignature(publicKey, randomBytes, signatureValue)) {
             System.out.println("OK");
         } else {
             System.out.println("FALHOU");
         }
-
         
     }
 }
