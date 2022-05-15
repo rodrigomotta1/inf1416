@@ -14,3 +14,5 @@ Verificar se usuário pode ver arquivo e, se sim, copiar arquivo
 Fazer espécie de controller p/ gerenciar estados do sistema e "telas"
 
 Colocar inserção dos registros e implementar programa LogView p/ ver logs
+
+Interface
